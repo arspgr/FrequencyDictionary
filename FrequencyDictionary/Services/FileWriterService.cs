@@ -25,10 +25,13 @@ namespace FrequencyDictionary.Services
                 for (var i = 0; i < parallelism; i++)
                 {
                     var textPart = string.Join("\n",
-                        words.Take(partSize * (i + 1)).Skip(partSize * i)
+                        words
                             .OrderByDescending(pair => pair.Value)
+                            .Take(partSize * (i + 1)).Skip(partSize * i)
                             .Select(pair => $"{pair.Key},{pair.Value}"));
-                    if (!string.IsNullOrWhiteSpace(textPart)) textPart = $"\n{textPart}";
+
+                    if (!string.IsNullOrWhiteSpace(textPart) && i != 0) textPart = $"\n{textPart}";
+
                     var bytes = encoding.GetBytes(textPart);
                     if (bytes.Length != 0)
                         tasks.Add(stream.WriteAsync(bytes, 0, bytes.Length));

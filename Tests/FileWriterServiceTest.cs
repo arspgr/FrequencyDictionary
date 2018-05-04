@@ -29,7 +29,9 @@ namespace Tests
 
             var resultText = File.ReadAllText(fileName);
 
-            Assert.AreEqual($"\n{string.Join("\n", words.Select(pair => $"{pair.Key},{pair.Value}"))}", resultText);
+            Assert.AreEqual(
+                $"{string.Join("\n", words.OrderByDescending(pair => pair.Value).Select(pair => $"{pair.Key},{pair.Value}"))}",
+                resultText);
 
             File.Delete(fileName);
         }
